@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Eco Hall - Circuit Schematic</title>
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --border-color: #30363d;
+            --text-main: #c9d1d9;
+            --accent-cyan: #58a6ff;
+            --accent-green: #3fb950;
+            --accent-orange: #d29922;
+            --accent-red: #f85149;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            color: #ffffff;
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            color: #8b949e;
+            font-size: 0.95rem;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 950px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+        }
+
+        .diagram-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            background: #090d12;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        svg {
+            width: 100%;
+            height: auto;
+            min-width: 800px;
+            display: block;
+        }
+
+        .wire {
+            stroke-width: 3;
+            stroke-linecap: round;
+            fill: none;
+            transition: stroke-width 0.2s, stroke 0.2s;
+        }
+
+        .wire:hover {
+            stroke-width: 6;
+            cursor: pointer;
+        }
+
+        .wire-vcc { stroke: #ea4335; }
+        .wire-gnd { stroke: #3c4043; }
+        .wire-pir { stroke: #fbbc05; }
+        .wire-relay1 { stroke: #4285f4; }
+        .wire-relay2 { stroke: #a142f4; }
+        .wire-led { stroke: #34a853; }
+
+        .pin-label {
+            font-family: monospace;
+            font-size: 11px;
+            fill: #8b949e;
+            font-weight: bold;
+        }
+
+        .component-box {
+            fill: #1f242c;
+            stroke: #444c56;
+            stroke-width: 2;
+            rx: 6;
+        }
+
+        .component-title {
+            fill: #ffffff;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .pinout-table {
+            width: 100%;
+            margin-top: 25px;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        .pinout-table th, .pinout-table td {
+            padding: 10px 14px;
+            border: 1px solid var(--border-color);
+            text-align: right;
+        }
+
+        .pinout-table th {
+            background-color: #21262d;
+            color: #ffffff;
+        }
+
+        .pinout-table tr:nth-child(even) {
+            background-color: #161b22;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: #fff;
+        }
+        .badge-vcc { background-color: #ea4335; }
+        .badge-gnd { background-color: #4b5563; }
+        .badge-sig { background-color: #4285f4; }
+
+        .notes-card {
+            margin-top: 20px;
+            padding: 15px;
+            background: #1c2129;
+            border-right: 4px solid var(--accent-cyan);
+            border-radius: 4px;
+            font-size: 0.88rem;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>📐 المخطط التوصيلي الكهربائي (Circuit Schematic)</h1>
+        <p>Smart Eco Hall Automation Prototype — Arduino UNO + PIR + 2-Channel Relay</p>
+    </div>
+
+    <div class="container">
+        <div class="diagram-wrapper">
+            <svg viewBox="0 0 900 550" xmlns="http://www.w3.org/2000/svg">
+                <!-- Grid pattern background -->
+                <defs>
+                    <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                        <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#1b2129" stroke-width="1"/>
+                    </pattern>
+                </defs>
+                <rect width="900" height="550" fill="url(#grid)" />
+
+                <!-- 1. ARDUINO UNO BOARD -->
+                <g id="arduino" transform="translate(300, 220)">
+                    <rect class="component-box" width="280" height="200" fill="#00878f" stroke="#005f63" stroke-width="3" rx="10"/>
+                    <text x="140" y="30" class="component-title" text-anchor="middle" fill="#ffffff" font-size="16">Arduino UNO R3</text>
+                    <rect x="15" y="15" width="50" height="35" fill="#a6a6a6" stroke="#737373"/>
+                    <text x="40" y="37" font-size="10" fill="#333" text-anchor="middle" font-weight="bold">USB</text>
+                    <rect x="15" y="145" width="45" height="40" fill="#222"/>
+
+                    <!-- Digital Pins (Top) -->
+                    <g transform="translate(70, 0)">
+                        <!-- Pins D0-D13 -->
+                        <rect x="0" y="0" width="190" height="15" fill="#222"/>
+                        <circle cx="160" cy="7" r="3" fill="#fff"/>
+                        <text x="160" y="27" class="pin-label" text-anchor="middle">D2 (PIR)</text>
+
+                        <circle cx="95" cy="7" r="3" fill="#fff"/>
+                        <text x="95" y="27" class="pin-label" text-anchor="middle">D7 (IN1)</text>
+
+                        <circle cx="80" cy="7" r="3" fill="#fff"/>
+                        <text x="80" y="27" class="pin-label" text-anchor="middle">D8 (IN2)</text>
+                    </g>
+
+                    <!-- Power Pins (Bottom) -->
+                    <g transform="translate(80, 185)">
+                        <rect x="0" y="0" width="160" height="15" fill="#222"/>
+                        <circle cx="50" cy="8" r="3" fill="#fff"/>
+                        <text x="50" y="-5" class="pin-label" text-anchor="middle">5V</text>
+
+                        <circle cx="70" cy="8" r="3" fill="#fff"/>
+                        <text x="70" y="-5" class="pin-label" text-anchor="middle">GND</text>
+                    </g>
+                </g>
+
+                <!-- 2. PIR SENSOR MODULE -->
+                <g id="pir" transform="translate(50, 40)">
+                    <rect class="component-box" width="180" height="110" fill="#005c2b" stroke="#00381a"/>
+                    <circle cx="90" cy="55" r="35" fill="#e6e6e6" stroke="#cccccc" stroke-width="2"/>
+                    <text x="90" y="60" font-size="11" fill="#666" text-anchor="middle" font-weight="bold">PIR LENS</text>
+                    <text x="90" y="100" class="component-title" text-anchor="middle">HC-SR501 PIR</text>
+
+                    <!-- Pins -->
+                    <circle cx="150" cy="110" r="4" fill="#fbbc05"/>
+                    <text x="150" y="125" class="pin-label" text-anchor="middle">OUT</text>
+
+                    <circle cx="130" cy="110" r="4" fill="#ea4335"/>
+                    <text x="130" y="125" class="pin-label" text-anchor="middle">VCC</text>
+
+                    <circle cx="110" cy="110" r="4" fill="#3c4043"/>
+                    <text x="110" y="125" class="pin-label" text-anchor="middle">GND</text>
+                </g>
+
+                <!-- 3. RELAY MODULE (2-CHANNEL) -->
+                <g id="relay" transform="translate(630, 40)">
+                    <rect class="component-box" width="220" height="150" fill="#1e293b" stroke="#334155"/>
+                    <text x="110" y="25" class="component-title" text-anchor="middle">2-Channel Relay Module</text>
+
+                    <!-- Relays Cubes -->
+                    <rect x="25" y="40" width="70" height="70" fill="#0284c7" rx="4"/>
+                    <text x="60" y="80" fill="#fff" font-size="12" font-weight="bold" text-anchor="middle">Relay 1</text>
+                    <rect x="125" y="40" width="70" height="70" fill="#0284c7" rx="4"/>
+                    <text x="160" y="80" fill="#fff" font-size="12" font-weight="bold" text-anchor="middle">Relay 2</text>
+
+                    <!-- Control Input Header Pins -->
+                    <g transform="translate(10, 130)">
+                        <circle cx="20" cy="0" r="4" fill="#ea4335"/>
+                        <text x="20" y="-8" class="pin-label" text-anchor="middle">VCC</text>
+
+                        <circle cx="40" cy="0" r="4" fill="#4285f4"/>
+                        <text x="40" y="-8" class="pin-label" text-anchor="middle">IN1</text>
+
+                        <circle cx="60" cy="0" r="4" fill="#a142f4"/>
+                        <text x="60" y="-8" class="pin-label" text-anchor="middle">IN2</text>
+
+                        <circle cx="80" cy="0" r="4" fill="#3c4043"/>
+                        <text x="80" y="-8" class="pin-label" text-anchor="middle">GND</text>
+                    </g>
+                </g>
+
+                <!-- 4. BREADBOARD & LED SIMULATION LOADS -->
+                <g id="breadboard" transform="translate(50, 320)">
+                    <rect class="component-box" width="200" height="180" fill="#e2e8f0" stroke="#cbd5e1"/>
+                    <text x="100" y="25" fill="#334155" font-weight="bold" font-size="13" text-anchor="middle">Breadboard & Load LEDs</text>
+
+                    <!-- LED 1 (Lighting Simulation) -->
+                    <circle cx="60" cy="70" r="12" fill="#22c55e" stroke="#15803d" stroke-width="2"/>
+                    <text x="60" y="100" fill="#1e293b" font-size="10" text-anchor="middle" font-weight="bold">LED (Light)</text>
+
+                    <!-- LED 2 (HVAC Simulation) -->
+                    <circle cx="140" cy="70" r="12" fill="#3b82f6" stroke="#1d4ed8" stroke-width="2"/>
+                    <text x="140" y="100" fill="#1e293b" font-size="10" text-anchor="middle" font-weight="bold">LED (HVAC)</text>
+
+                    <!-- Resistors -->
+                    <rect x="52" y="115" width="16" height="30" fill="#d97706" rx="3"/>
+                    <text x="60" y="160" fill="#475569" font-size="9" text-anchor="middle">220Ω</text>
+
+                    <rect x="132" y="115" width="16" height="30" fill="#d97706" rx="3"/>
+                    <text x="140" y="160" fill="#475569" font-size="9" text-anchor="middle">220Ω</text>
+                </g>
+
+                <!-- WIRING / CONDUCTORS -->
+                <!-- PIR Signal (Pin D2) -->
+                <path class="wire wire-pir" d="M 200 150 L 200 180 L 460 180 L 460 220" />
+                
+                <!-- PIR VCC -->
+                <path class="wire wire-vcc" d="M 180 150 L 180 195 L 350 195 L 350 405" />
+
+                <!-- PIR GND -->
+                <path class="wire wire-gnd" d="M 160 150 L 160 210 L 370 210 L 370 405" />
+
+                <!-- Relay IN1 (Pin D7) -->
+                <path class="wire wire-relay1" d="M 395 220 L 395 185 L 670 185 L 670 170" />
+
+                <!-- Relay IN2 (Pin D8) -->
+                <path class="wire wire-relay2" d="M 380 220 L 380 200 L 690 200 L 690 170" />
+
+                <!-- Relay VCC -->
+                <path class="wire wire-vcc" d="M 650 170 L 650 250 L 350 250 L 350 405" />
+
+                <!-- Relay GND -->
+                <path class="wire wire-gnd" d="M 710 170 L 710 265 L 370 265 L 370 405" />
+
+                <!-- Breadboard LED Drive lines -->
+                <path class="wire wire-led" d="M 730 110 L 870 110 L 870 390 L 250 390" />
+                <path class="wire wire-led" d="M 630 110 L 610 110 L 610 370 L 110 370" />
+
+            </svg>
+        </div>
+
+        <h3>📌 جدول التوصيلات التفصيلي (Pin Connection Matrix)</h3>
+        <table class="pinout-table">
+            <thead>
+                <tr>
+                    <th>المكون (Component)</th>
+                    <th>منفذ المكون (Component Pin)</th>
+                    <th>منفذ الآردوينو (Arduino Pin)</th>
+                    <th>نوع الإشارة / الوظيفة</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>PIR Sensor</strong></td>
+                    <td>OUT</td>
+                    <td><span class="badge badge-sig">Digital Pin 2</span></td>
+                    <td>إشارة إدخال رقمية (حساسية الحركة)</td>
+                </tr>
+                <tr>
+                    <td><strong>PIR Sensor</strong></td>
+                    <td>VCC (+5V)</td>
+                    <td><span class="badge badge-vcc">5V Power Rail</span></td>
+                    <td>تغذية طاقة موجب 5 فولت</td>
+                </tr>
+                <tr>
+                    <td><strong>PIR Sensor</strong></td>
+                    <td>GND (Ground)</td>
+                    <td><span class="badge badge-gnd">GND Rail</span></td>
+                    <td>أرضي مشترك</td>
+                </tr>
+                <tr>
+                    <td><strong>Relay Module</strong></td>
+                    <td>IN1 (Lighting)</td>
+                    <td><span class="badge badge-sig">Digital Pin 7</span></td>
+                    <td>تحكم الإضاءة (Active LOW)</td>
+                </tr>
+                <tr>
+                    <td><strong>Relay Module</strong></td>
+                    <td>IN2 (HVAC)</td>
+                    <td><span class="badge badge-sig">Digital Pin 8</span></td>
+                    <td>تحكم التكييف/التهوية (Active LOW)</td>
+                </tr>
+                <tr>
+                    <td><strong>Relay Module</strong></td>
+                    <td>VCC / GND</td>
+                    <td><span class="badge badge-vcc">5V</span> / <span class="badge badge-gnd">GND</span></td>
+                    <td>تغذية الموديول والملفات المغناطيسية</td>
+                </tr>
+                <tr>
+                    <td><strong>Breadboard LEDs</strong></td>
+                    <td>Anode (+) & Resistors</td>
+                    <td>Relay NO Outputs</td>
+                    <td>محاكاة الأحمال الكهربائية لتقليل المخاطر</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="notes-card">
+            💡 <strong>ملاحظات احترافية للتوصيل:</strong>
+            <ul>
+                <li><strong>المنطق العكسي (Active-LOW Relay):</strong> يعطي الآردوينو إشارة `LOW` لغلق الريليه وتشغيل الحمل، وإشارة `HIGH` لإطفائه.</li>
+                <li><strong>حماية المخرجات (Resistors):</strong> تم توصيل مقاومات 220 أوم على التوالي مع ليدات الاختبار لمنع احتراقها لحماية منافذ التحكم.</li>
+                <li><strong>الأرضي المشترك (Common GND):</strong> تم توحيد خطوط الأرضي (GND) بين الآردوينو وموديول الريليه وحساس الحركة لضمان استقرار الإشارات الرقمية.</li>
+            </ul>
+        </div>
+    </div>
+
+</body>
+</html>
