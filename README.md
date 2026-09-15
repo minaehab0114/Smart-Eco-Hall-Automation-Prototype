@@ -62,6 +62,9 @@ The **Smart Eco Hall Automation System** is a micro-controller prototype designe
 | **5V** | PIR & Relay VCC | Power Supply (+) |
 | **GND** | PIR & Relay GND | Common Ground (-) |
 
+<p align="center">
+  <img src="Screenshot 2026-09-15 043240.png" alt="Hardware Setup" width="80%" />
+</p>
 ---
 
 ## 💻 Firmware Code (C++)
